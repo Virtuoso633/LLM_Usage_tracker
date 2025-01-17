@@ -3,28 +3,27 @@
     "builds": [
         {
             "src": "api/index.py",
-            "use": "@vercel/python"
+            "use": "@vercel/python",
+            "config": {
+                "runtime": "python3.9"
+            }
         },
         {
             "src": "public/**",
             "use": "@vercel/static"
         }
-        ],
-        "routes": [
+    ],
+    "routes": [
         {
             "src": "/api/(.*)",
-            "dest": "/api/index.py"
+            "dest": "api/index.py"
         },
         {
             "handle": "filesystem"
         },
         {
-            "src": "/favicon.ico",
-            "dest": "/public/favicon.ico"
-        },
-        {
             "src": "/(.*)",
-            "dest": "/public/$1"
+            "dest": "public/$1"
         }
     ],
     "env": {
