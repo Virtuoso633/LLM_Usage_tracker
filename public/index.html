@@ -1,10 +1,10 @@
+<!--
 <!DOCTYPE html>
 <html>
 <head>
     <title>ChatGPT Heatmap Generator</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="data:,">  <!-- This prevents favicon requests -->
-    <!-- Add moment.js for timezone handling -->
+    <link rel="icon" href="data:,"> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone-with-data.min.js"></script>
 </head>
@@ -23,7 +23,6 @@
             <div class="form-group">
                 <label for="timezone">Select your timezone:</label>
                 <select id="timezone" required>
-                    <!-- Will be populated with JavaScript -->
                 </select>
             </div>
             
@@ -35,5 +34,46 @@
         </div>
     </div>
     <script src="script.js"></script>
+</body>
+</html>
+
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ChatGPT Heatmap Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:,">
+</head>
+<body>
+    <div class="container">
+        <h1>ChatGPT Conversation Heatmap</h1>
+        <div id="status">Checking backend connection...</div>
+        <div id="debug"></div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusDiv = document.getElementById('status');
+            const debugDiv = document.getElementById('debug');
+
+            // Test backend connection
+            statusDiv.innerHTML = 'Attempting to connect to backend...';
+            
+            fetch('/api/test')
+                .then(response => {
+                    debugDiv.innerHTML += `<br>Response status: ${response.status}`;
+                    return response.json();
+                })
+                .then(data => {
+                    debugDiv.innerHTML += `<br>Data received: ${JSON.stringify(data)}`;
+                    statusDiv.innerHTML = `<p style="color: green;">Backend connected! Message: ${data.message}</p>`;
+                })
+                .catch(error => {
+                    debugDiv.innerHTML += `<br>Error: ${error.message}`;
+                    statusDiv.innerHTML = `<p style="color: red;">Connection failed: ${error.message}</p>`;
+                });
+        });
+    </script>
 </body>
 </html>
