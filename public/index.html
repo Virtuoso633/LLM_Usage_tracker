@@ -1,44 +1,40 @@
-<!--
 <!DOCTYPE html>
 <html>
 <head>
     <title>ChatGPT Heatmap Generator</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="data:,"> 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone-with-data.min.js"></script>
 </head>
 <body>
     <div class="container">
         <h1>ChatGPT Conversation Heatmap</h1>
+        <div id="status">Checking backend connection...</div>
+        <div id="debug"></div>
         
-        <div id="status"></div>
-        
-        <form id="uploadForm">
-            <div class="form-group">
-                <label for="file">Upload conversations.json:</label>
-                <input type="file" id="file" accept=".json" required>
-            </div>
+        <div id="content" style="display: none;">
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label for="file">Upload conversations.json:</label>
+                    <input type="file" id="file" accept=".json" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="timezone">Select your timezone:</label>
+                    <select id="timezone" required></select>
+                </div>
+                
+                <button type="submit">Generate Heatmap</button>
+            </form>
             
-            <div class="form-group">
-                <label for="timezone">Select your timezone:</label>
-                <select id="timezone" required>
-                </select>
+            <div id="result">
+                <img id="heatmap" style="display: none;">
             </div>
-            
-            <button type="submit">Generate Heatmap</button>
-        </form>
-        
-        <div id="result">
-            <img id="heatmap" style="display: none;">
         </div>
     </div>
     <script src="script.js"></script>
 </body>
 </html>
 
--->
-
+<!--
 <!DOCTYPE html>
 <html>
 <head>
@@ -77,3 +73,5 @@
     </script>
 </body>
 </html>
+
+-->

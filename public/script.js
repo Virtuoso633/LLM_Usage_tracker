@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const API_URL = window.location.origin;// for vercel 
+    //const API_URL = window.location.origin;// for vercel 
     //const API_URL = 'http://localhost:5000';  // Local development API URL
     const statusDiv = document.getElementById('status');
+    const debugDiv = document.getElementById('debug');
     const contentDiv = document.getElementById('content');
 
     // Show loading status
@@ -9,23 +10,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
      // Test backend connection
-    fetch(`${API_URL}/api/test`)
-        .then(async response => {
-            console.log('Response status:', response.status);
+    fetch(`/api/test`)
+        .then(response => {
+            debugDiv.innerHTML += `<br>Response status: ${response.status}`;
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            const data = await response.json();
-            console.log('Backend response:', data);
-            return data;
+            return response.json();
         })
         .then(data => {
-            statusDiv.innerHTML = `<p style="color: green;">Backend connected successfully! ${data.message}</p>`;
-            contentDiv.style.display = 'block';
+            if (data.status === 'success') {
+                statusDiv.innerHTML = `<p style="color: green;">Backend connected! ${data.message}</p>`;
+                contentDiv.style.display = 'block';
+            } else {
+                throw new Error(data.message || 'Unknown error');
+            }
         })
         .catch(error => {
             console.error('Backend error:', error);
-            statusDiv.innerHTML = `<p style="color: red;">Backend connection failed: ${error.message}</p>`;
+            statusDiv.innerHTML = `<p style="color: red;">Connection failed: ${error.message}</p>`;
         });
 
     // Populate timezone dropdown
