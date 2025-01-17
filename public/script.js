@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     //const API_URL = window.location.origin;// for vercel 
     //const API_URL = 'http://localhost:5000';  // Local development API URL
     const statusDiv = document.getElementById('status');
+    const contentDiv = document.getElementById('content');
 
     // Show loading status
     statusDiv.innerHTML = '<p>Connecting to backend...</p>';
@@ -9,14 +10,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
      // Test backend connection
     fetch(`/api/test`)
-        .then(response => response.json())
+        .then(async response => {
+            console.log('Response status:', response.status);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            console.log('Backend response:', data);
+            return data;
+        })
         .then(data => {
-            console.log('Backend response:', data);  // Debug log
-            statusDiv.innerHTML = '<p style="color: green;">Backend connected successfully!</p>';
+            statusDiv.innerHTML = `<p style="color: green;">Backend connected successfully! ${data.message}</p>`;
+            contentDiv.style.display = 'block';
         })
         .catch(error => {
-            console.error('Backend connection error:', error);  // Debug log
-            statusDiv.innerHTML = '<p style="color: red;">Backend connection failed. Make sure the Flask server is running.</p>';
+            console.error('Backend error:', error);
+            statusDiv.innerHTML = `<p style="color: red;">Backend connection failed: ${error.message}</p>`;
         });
 
     // Populate timezone dropdown

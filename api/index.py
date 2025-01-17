@@ -94,8 +94,17 @@ def create_year_heatmap(convo_times, year):
 
 @app.route('/api/test', methods=['GET'])
 def test():
-    return jsonify({"message": "Backend is working!"})
-    
+    try:
+        return jsonify({
+            "status": "success",
+            "message": "Backend is working!"
+        }), 200
+    except Exception as e:
+        print(f"Error in test endpoint: {str(e)}")
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500    
 
 @app.route('/api/generate-heatmap', methods=['POST'])
 def generate_heatmap():
@@ -146,6 +155,9 @@ def handler(request):
         return app.view_functions['test']()
     elif request.path == '/api/generate-heatmap':
         return app.view_functions['generate_heatmap']()
+    
+
+
 
 # **used for local server**
 # if __name__ == '__main__':
