@@ -16,6 +16,9 @@
             "dest": "/api/index.py"
         },
         {
+            "handle": "filesystem"
+        },
+        {
             "src": "/favicon.ico",
             "dest": "/public/favicon.ico"
         },
@@ -23,7 +26,6 @@
             "src": "/(.*)",
             "dest": "/public/$1"
         }
-
     ],
     "env": {
         "PYTHONUNBUFFERED": "1"
