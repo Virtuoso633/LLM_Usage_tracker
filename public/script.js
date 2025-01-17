@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const API_URL = window.location.origin;// for vercel 
+    //const API_URL = window.location.origin;// for vercel 
     //const API_URL = 'http://localhost:5000';  // Local development API URL
     const statusDiv = document.getElementById('status');
 
@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
      // Test backend connection
-    fetch(`${API_URL}/api/test`)
+    fetch(`/api/test`)
         .then(response => response.json())
         .then(data => {
             console.log('Backend response:', data);  // Debug log
