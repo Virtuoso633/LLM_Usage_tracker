@@ -256,10 +256,12 @@ def create_year_heatmap(convo_times, year):
 
 def test():
     try:
-        return jsonify({
+        response = jsonify({
             "status": "success",
             "message": "Backend is working!"
-        }), 200
+        })
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
     except Exception as e:
         print(f"Error in test endpoint: {str(e)}")
         return jsonify({
@@ -302,30 +304,43 @@ def generate_heatmap(request_data):
             'message': str(e)
         }), 400
 
-def handler(request):
-    """Handle incoming requests for Vercel serverless function"""
-    try:
-        # Extract path and method from the request
-        path = request.path
-        method = request.method
+class VercelRequest:
+    """Wrapper class for Vercel request object"""
+    def __init__(self, request_data):
+        self.path = request_data.get('path', '')
+        self.method = request_data.get('method', 'GET')
+        self.body = request_data.get('body', {})
+        self.headers = request_data.get('headers', {})
+        self.query = request_data.get('query', {})
 
-        # Route requests to appropriate handlers
-        if method == "GET" and path == "/api/test":
+def handler(event, context):
+    """Vercel serverless function handler"""
+    try:
+        # Create a request wrapper
+        request = VercelRequest(event)
+        
+        # Route requests
+        if request.method == "GET" and request.path == "/api/test":
             return test()
-        elif method == "POST" and path == "/api/generate-heatmap":
+        elif request.method == "POST" and request.path == "/api/generate-heatmap":
             return generate_heatmap(request)
         else:
-            return jsonify({
-                "status": "error",
-                "message": f"Invalid path or method: {path} {method}"
-            }), 404
-
+            return {
+                "statusCode": 404,
+                "body": json.dumps({
+                    "status": "error",
+                    "message": f"Invalid path: {request.path}"
+                })
+            }
     except Exception as e:
         print(f"Handler error: {str(e)}")
-        return jsonify({
-            "status": "error",
-            "message": str(e)
-        }), 500
+        return {
+            "statusCode": 500,
+            "body": json.dumps({
+                "status": "error",
+                "message": str(e)
+            })
+        }
 
 # For local development
 if __name__ == '__main__':
@@ -333,4 +348,3 @@ if __name__ == '__main__':
     app.add_url_rule('/api/generate-heatmap', 'generate_heatmap', 
                     lambda: generate_heatmap(request), methods=['POST'])
     app.run(debug=True, port=5000, host='0.0.0.0')
-
