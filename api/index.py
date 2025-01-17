@@ -17,7 +17,7 @@ from collections import Counter
 
 app = Flask(__name__)
 # Enable CORS for all domains
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 def create_year_heatmap(convo_times, year):
     
@@ -92,12 +92,12 @@ def create_year_heatmap(convo_times, year):
 
     return img_base64
 
-@app.route('/test', methods=['GET'])
+@app.route('/api/test', methods=['GET'])
 def test():
     return jsonify({"message": "Backend is working!"})
     
 
-@app.route('/generate-heatmap', methods=['POST'])
+@app.route('/api/generate-heatmap', methods=['POST'])
 def generate_heatmap():
     try:
         if 'file' not in request.files:

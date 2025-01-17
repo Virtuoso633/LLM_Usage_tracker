@@ -1,7 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const API_URL = '';// for vercel 
+    const API_URL = window.location.origin;// for vercel 
     //const API_URL = 'http://localhost:5000';  // Local development API URL
     const statusDiv = document.getElementById('status');
+
+    // Show loading status
+    statusDiv.innerHTML = '<p>Connecting to backend...</p>';
+
 
      // Test backend connection
     fetch(`${API_URL}/api/test`)
@@ -33,6 +37,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Form submission
     document.getElementById('uploadForm').addEventListener('submit', async function(e) {
         e.preventDefault();
+
+        statusDiv.innerHTML = '<p>Processing file...</p>';
         
         const fileInput = document.getElementById('file');
         if (!fileInput.files.length) {
@@ -47,11 +53,15 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             statusDiv.innerHTML = '<p>Generating heatmap...</p>';
             
-            const response = await fetch(`${API_URL}/generate-heatmap`, {
+            const response = await fetch(`${API_URL}/api/generate-heatmap`, {
                 method: 'POST',
                 body: formData
             });
-            
+
+            // (!response.ok) {
+            //     throw new Error('Network response was not ok')
+            // }
+
             const data = await response.json();
             
             if (data.status === 'success') {
